@@ -1,0 +1,42 @@
+name: CD - Dynamic Analysis
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  zap:
+    name: Run OWASP ZAP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up ZAP
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zaproxy
+
+      - name: Start OWASP ZAP
+        run: |
+          zap.sh -daemon -port 8080
+
+      - name: Run ZAP Spider
+        run: |
+          zap-cli spider http://your-staging-url
+          
+      - name: Run ZAP Active Scan
+        run: |
+          zap-cli active-scan http://your-staging-url
+
+      - name: Generate ZAP Report
+        run: |
+          zap-cli report -o zap-report.html -f html
+          
+      - name: Upload Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: zap-report.html
