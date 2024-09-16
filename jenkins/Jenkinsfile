@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    echo 'Building...'
+                }
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=<your-project-key>'
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    echo 'Deploying...'
+                }
+            }
+        }
+        stage('OWASP ZAP Scan') {
+            steps {
+                script {
+                    sh 'zap.sh -daemon -port 8080'
+                    sh 'zap-cli spider http://your-staging-url'
+                    sh 'zap-cli active-scan http://your-staging-url'
+                    sh 'zap-cli report -o zap-report.html -f html'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'zap-report.html'
+        }
+    }
+}
