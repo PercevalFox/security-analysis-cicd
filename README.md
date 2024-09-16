@@ -9,16 +9,16 @@ Ce projet configure un pipeline CI/CD avec des outils d'analyse statique (SonarQ
 
 ## Structure du Projet
 
-security-analysis-cicd/ 
-│ ├── .github/ 
-│ ├── workflows/ 
-│ │ ├── ci.yml
-│ │ └── cd.yml
-│ ├── jenkins/ 
-│ └── Jenkinsfile
-│ ├── src/ 
-│ └── (Code source de ton projet) 
-│ └── README.md
+security-analysis-cicd/  
+│ ├── .github/  
+│ ├── workflows/  
+│ │ ├── ci.yml  
+│ │ └── cd.yml  
+│ ├── jenkins/  
+│ └── Jenkinsfile  
+│ ├── src/  
+│ └── (Code source de ton projet)  
+│ └── README.md  
 
 
 ## Prérequis
